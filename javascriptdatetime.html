@@ -1,0 +1,102 @@
+<html><head></head><body>
+
+
+
+
+<c>A Javascript library for date time functions<br><br></c>
+
+Javascripts datetime functions are inane.  As an example, getTime() doesn't return the time, it returns the number of milliseconds since January 1st 1970. getMonth() returns a number from 0-11.    This collection hopes to create a set of date time functions that are more useful and intuitive. 
+
+
+
+<script type="text/javascript">
+document.write ("<br><br><br>");
+
+
+document.write ("getTodayDateTime():<br>");
+document.write (getTodayDateTime());
+document.write ("<br><br>"); 
+
+document.write ("getTodayDate():<br>");
+document.write (getTodayDate());
+document.write ("<br><br>"); 
+
+
+document.write ("getCurrentTime():<br>");
+document.write (getCurrentTime());
+document.write ("<br><br>"); 
+
+
+document.write ("getCurrentTimeNoSeconds():<br>");
+document.write (getCurrentTimeNoSeconds());
+document.write ("<br><br>"); 
+
+document.write ("getDifferenceInDays():<br>");
+document.write (getDifferenceInDays("06/30/2019","07/30/2019"));
+document.write ("<br><br>"); 
+
+
+
+
+function getTodayDateTime(){
+	
+	var todayDateTime = new Date();
+	return todayDateTime;
+
+}
+
+function getTodayDate(){
+
+	var today = new Date();
+	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	return date;
+}
+
+function getCurrentTime(){
+	var today = new Date();
+	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	return time;
+}
+
+function getCurrentTimeNoSeconds(){
+	var today = new Date();
+	var time = today.getHours() + ":" + today.getMinutes() ;
+	return time;
+}
+
+function getDifferenceInDays(olderDate,newerDate){
+	var date1 = new Date(olderDate); 
+	var date2 = new Date(newerDate); 
+	  
+	// To calculate the time difference of two dates 
+	var Difference_In_Time = date2.getTime() - date1.getTime(); 
+	  
+	// To calculate the no. of days between two dates 
+	var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+	  
+	//To display the final no. of days (result) 
+	
+	 
+	 return Difference_In_Days;
+
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script></body></html>
