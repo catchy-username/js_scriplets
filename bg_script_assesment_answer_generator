@@ -1,0 +1,102 @@
+// starting from an IRM/CAM authorization package: 
+
+// Relationships: starting with the auth package -> -> authorization boundary -> grc profile (entity) -> assessment instance -> assessment instance question -> assessment metric
+
+my_sys_id="f0d846471b8ce8105fd99cef034bcbc7";
+
+var current= new GlideRecord ("sn_irm_cont_auth_pack")
+    current.addQuery("sys_id",my_sys_id); 
+    current.query();
+    if (current.next()) { gs.info ("Current record is " + current.name);}
+
+
+var boundary = new GlideRecord ("sn_irm_cont_auth_authorization_boundary"); 
+    boundary.addQuery("sys_id",current.authorization_boundary);
+    boundary.query();
+    if (boundary.next()) {gs.info("Auth boundary is " + boundary.name);}
+
+var profile=new GlideRecord("sn_grc_profile"); 
+	profile.addQuery("sys_id", boundary.entity);
+        profile.query();
+        if(profile.next()) {gs.info ("Profile is  " + profile.name); }
+
+
+
+var ai = new GlideRecord("asmt_assessment_instance");
+        ai.addQuery("sn_grc_profile",profile.sys_id);
+        ai.query();
+        if (ai.next()){gs.info("Assessment Instance number is " + ai.number);} 
+
+//Now I can search for all questions from that instance.
+
+var q   = new GlideRecord("asmt_assessment_instance_question"); 
+    q.addQuery("instance",ai.sys_id);
+    q.query();
+   
+
+
+ /* Ironically the questions object doesn't actually contain the question asked to the user- that's contained in the               metric, so we have to relate on more time. Each question contains a field "metric" which, in the metrics table, is called "name" */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ while (q.next()){
+
+    var metric=new GlideRecord("asmt_metric");
+        metric.addQuery("name", q.metric.name);
+        metric.query();
+        if (metric.next()){
+         gs.info("the object Question: " + q.metric.name + " relates to the metric "+ metric.name + " which asks the question: " + metric.question);
+ 
+       /*So now I have the question, which isn't the question at all but rather the record that needs to be updated with the answer, (asmt_assessment_instance_question.string_value), and I have the metric, which actually contains the question that needs to be answered, so I can match that question and provide the answer.  
+   Now, there's two ways I can do this.  The long way - matching the full string of the question like this: 
+     if (metric.question="This string")
+
+       or the short way, matching the metric name itself. It just boils down to copy and pasting either way.
+       */
+
+      //if (metric.name="Data Reasoning") { q.string_value = strDataReasoning); q.update();}
+
+
+       }
+}
+
+
+gs.info("---------------------------------------------");
+
+// If an assessment has already been completed, this will pull the answers for us and format it ready to paste back into the script. 
+
+var answers   = new GlideRecord("asmt_assessment_instance_question"); 
+    answers.addQuery("instance",ai.sys_id);
+    answers.query();
+	
+while (answers.next()){
+
+    var metric=new GlideRecord("asmt_metric");
+        metric.addQuery("name", answers.metric.name);
+        metric.query();
+        if (metric.next()){
+       
+         gs.info( "if (metric.name=\""+answers.metric.name + "\"){ q.string_value =\""+  answers.string_value+ "\");q.update();}"); 
+        
+
+
+
+             }
+} 
